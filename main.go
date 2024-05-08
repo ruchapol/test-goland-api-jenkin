@@ -9,5 +9,9 @@ func main() {
 		return c.SendString("Hello, World!")
 	})
 
+	app.Get("/test", func(c *fiber.Ctx) error {
+		return c.SendString("Hello, World! test 1234")
+	})
+
 	app.Listen(":3000")
 }
