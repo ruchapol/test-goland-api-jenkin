@@ -15,12 +15,13 @@ pipeline {
                 script {
                     
                     def customImage = docker.build("${CONTAINER_NAME}:latest", "-f ${DOCKERFILE} .")
-                    
+                     
+                    customImage.withRun('-p 3306:3306')
 
                     customImage.inside {
                         echo 'Hello World'
                         sh 'ls -l /app'  // List files in the /app directory
-                        sh '/app/main'  // Run main using the full path
+                        // sh '/app/main'  // Run main using the full path
                     }
                 }
             }
