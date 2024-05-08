@@ -1,6 +1,6 @@
 CONTAINER_NAME = "test-goland-api-jenkin"
 IMAGE = "${CONTAINER_NAME}:latest"
-DOCKERFILE = "./Dockerfile"
+DOCKERFILE = "./Dockerfile.jenkins"
 
 
 pipeline {
