@@ -19,8 +19,8 @@ pipeline {
 
                     customImage.inside {
                         echo 'Hello World'
-                        sh "ls"
-                        sh "./main"
+                        sh 'ls -l /app'  // List files in the /app directory
+                        sh '/app/main'  // Run main using the full path
                     }
                 }
             }
