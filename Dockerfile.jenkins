@@ -1,0 +1,19 @@
+FROM golang:1.18.2-alpine3.15 AS builder
+
+WORKDIR /app
+
+COPY ./main.go .
+
+RUN go mod init my-app && \
+    go get github.com/gofiber/fiber/v2 && \
+    GOOS=linux GOARCH=amd64 go build -o ./main ./main.go
+
+FROM alpine:3.15
+
+WORKDIR /app
+
+COPY --from=builder /app/main .
+
+EXPOSE 3000
+
+CMD ["./main"]
