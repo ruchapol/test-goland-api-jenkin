@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container in detached mode
-                    sh "docker run -d --name ${CONTAINER_NAME} -p 3306:3306 ${IMAGE}"
+                    sh "docker run -d --name ${CONTAINER_NAME} -p 3001:3000 ${IMAGE}"
                     
                     // Execute commands inside the container (optional)
                     sh "docker exec ${CONTAINER_NAME} echo 'Hello World'"
