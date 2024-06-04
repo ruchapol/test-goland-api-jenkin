@@ -22,18 +22,14 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Run the Docker container
+                    // Run the Docker container in detached mode
                     sh "docker run -d --name ${CONTAINER_NAME} -p 3306:3306 ${IMAGE}"
                     
-                    // Execute commands inside the container
+                    // Execute commands inside the container (optional)
                     sh "docker exec ${CONTAINER_NAME} echo 'Hello World'"
                     sh "docker exec ${CONTAINER_NAME} ls -l /app"
                     // Uncomment the next line if you want to run the main application
                     sh "docker exec ${CONTAINER_NAME} /app/main"
-                    
-                    // Stop and remove the container after use
-                    sh "docker stop ${CONTAINER_NAME}"
-                    sh "docker rm ${CONTAINER_NAME}"
                 }
             }
         }
