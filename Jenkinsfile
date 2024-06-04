@@ -4,8 +4,22 @@ pipeline {
         CONTAINER_NAME = "test-goland-api-jenkin"
         IMAGE = "${CONTAINER_NAME}:latest"
         DOCKERFILE = "./Dockerfile.jenkins"
+        PORT_MAPPING = "3001:3000"
     }
     stages {
+        stage('Cleanup') {
+            steps {
+                script {
+                    // Stop and remove the container if it already exists
+                    sh """
+                        if [ \$(docker ps -aq -f name=${CONTAINER_NAME}) ]; then
+                            docker stop ${CONTAINER_NAME} || true
+                            docker rm ${CONTAINER_NAME} || true
+                        fi
+                    """
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/ruchapol/test-goland-api-jenkin'
@@ -23,13 +37,11 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container in detached mode
-                    sh "docker run -d --name ${CONTAINER_NAME} -p 3001:3000 ${IMAGE}"
+                    sh "docker run -d --name ${CONTAINER_NAME} -p ${PORT_MAPPING} ${IMAGE}"
                     
                     // Execute commands inside the container (optional)
                     sh "docker exec ${CONTAINER_NAME} echo 'Hello World'"
                     sh "docker exec ${CONTAINER_NAME} ls -l /app"
-                    // Uncomment the next line if you want to run the main application
-                    sh "docker exec ${CONTAINER_NAME} /app/main"
                 }
             }
         }
