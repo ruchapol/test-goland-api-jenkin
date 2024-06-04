@@ -29,7 +29,7 @@ pipeline {
                     sh "docker exec ${CONTAINER_NAME} echo 'Hello World'"
                     sh "docker exec ${CONTAINER_NAME} ls -l /app"
                     // Uncomment the next line if you want to run the main application
-                    // sh "docker exec ${CONTAINER_NAME} /app/main"
+                    sh "docker exec ${CONTAINER_NAME} /app/main"
                     
                     // Stop and remove the container after use
                     sh "docker stop ${CONTAINER_NAME}"
