@@ -40,7 +40,7 @@ pipeline {
                     // Run the Docker container with volume mapping
                     sh "docker run --name ${CONTAINER_NAME} ${PORT_MAPPING} ${IMAGE}"
 
-                    sh "docker cp ${CONTAINER_NAME}:/app/artifact ./artifact"
+                    sh "docker cp ${CONTAINER_NAME}:/app/artifact ."
                     
                     // Stop and remove the container after copying the artifact
                     sh "docker stop ${CONTAINER_NAME} || true"
