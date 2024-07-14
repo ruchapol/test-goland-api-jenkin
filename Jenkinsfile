@@ -1,5 +1,10 @@
 pipeline {
     agent any
+
+    triggers {
+        pollSCM 'H/2 * * * *'
+    }
+
     environment {
         CONTAINER_NAME = "bank-jenkins"
         IMAGE = "${CONTAINER_NAME}:latest"
@@ -15,6 +20,7 @@ pipeline {
         REMOTE_IDENTITY_FILE = "-i /var/lib/jenkins/.ssh/id_rsa"
         // ${REMOTE_USER}@${REMOTE_HOST}
     }
+
     stages {
         stage('Cleanup') {
             steps {
