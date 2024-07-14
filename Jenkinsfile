@@ -26,7 +26,7 @@ pipeline {
                         fi
                     """
 
-                    sh "ssh ${REMOTE_SCP_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} stop\""
+                    sh "ssh ${REMOTE_SSH_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} stop\""
                 }
             }
         }
@@ -77,7 +77,7 @@ pipeline {
         stage('Run') {
             steps {
                 script {
-                    sh "ssh ${REMOTE_SCP_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} start\""
+                    sh "ssh ${REMOTE_SSH_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} start\""
                 }
             }
         }
