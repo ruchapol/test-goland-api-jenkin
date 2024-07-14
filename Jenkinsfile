@@ -5,7 +5,7 @@ pipeline {
         IMAGE = "${CONTAINER_NAME}:latest"
         DOCKERFILE = "./Dockerfile.jenkins"
         PORT_MAPPING = "-p 3001:3000"
-        // VOLUME_MAPPING = "-v \$(pwd)/artifact:/app/artifact"
+        VOLUME_MAPPING = "-v ${WORKSPACE}/artifact:/app/artifact"
     }
     stages {
         stage('Cleanup') {
@@ -18,6 +18,15 @@ pipeline {
                             docker rm ${CONTAINER_NAME} || true
                         fi
                     """
+                }
+            }
+        }
+        stage('Prepare Workspace') {
+            steps {
+                script {
+                    // Ensure Jenkins has permission to write to the workspace
+                    sh "mkdir -p ./artifact"
+                    sh "chmod 777 ./artifact"
                 }
             }
         }
@@ -37,12 +46,10 @@ pipeline {
         stage('Run Docker Container For Build') {
             steps {
                 script {
-                    // Run the Docker container with volume mapping
-                    sh "docker run --name ${CONTAINER_NAME} ${PORT_MAPPING} ${IMAGE}"
-
-                    sh "docker cp ${CONTAINER_NAME}:/app/artifact ."
+                    // Run the Docker container with volume mapping and specific user permissions
+                    sh "docker run --name ${CONTAINER_NAME} ${PORT_MAPPING} ${VOLUME_MAPPING} ${IMAGE}"
                     
-                    // Stop and remove the container after copying the artifact
+                    // Stop and remove the container after the process
                     sh "docker stop ${CONTAINER_NAME} || true"
                     sh "docker rm ${CONTAINER_NAME} || true"
                 }
