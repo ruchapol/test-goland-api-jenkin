@@ -31,7 +31,7 @@ docker run -d \
   -e USER_NAME=jenkins `#optional` \
   -e LOG_STDOUT= `#optional` \
   -p 2224:2222 \
-  -p 3001:3001 \
+  -p 3001:3000 \
   --restart unless-stopped \
   lscr.io/linuxserver/openssh-server:latest
 
@@ -42,7 +42,7 @@ ssh-copy-id  -p 2224 -i /home/ruchapol/.ssh/id_rsa jenkins@localhost
 ssh jenkins@localhost -p 2224 -i /home/ruchapol/.ssh/id_rsa
 
 // make folder to run a project
-mkdir -P /home/jenkins/be-api
+mkdir -p /home/jenkins/be-api
 chown -R jenkins:jenkins /home/jenkins
 
 // make own be-api service
@@ -105,7 +105,7 @@ esac
 
 ```
 
-chmod +x /path/to/your/script.sh
+chmod +x /home/jenkins/be-api/run-2.sh
 
 // run/start/stop service
 /home/jenkins/be-api/run-2.sh [start|stop|status|restart]
