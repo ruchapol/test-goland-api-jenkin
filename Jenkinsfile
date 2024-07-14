@@ -21,15 +21,6 @@ pipeline {
                 }
             }
         }
-        stage('Prepare Workspace') {
-            steps {
-                script {
-                    // Ensure Jenkins has permission to write to the workspace
-                    sh "mkdir -p ./artifact"
-                    sh "chmod 777 ./artifact"
-                }
-            }
-        }
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/ruchapol/test-goland-api-jenkin'
