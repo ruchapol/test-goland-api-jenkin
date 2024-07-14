@@ -26,8 +26,6 @@ pipeline {
                             docker rm ${CONTAINER_NAME} || true
                         fi
                     """
-
-                    sh "ssh ${REMOTE_IDENTITY_FILE} ${REMOTE_SSH_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} stop\""
                 }
             }
         }
@@ -78,7 +76,7 @@ pipeline {
         stage('Run') {
             steps {
                 script {
-                    sh "ssh ${REMOTE_IDENTITY_FILE} ${REMOTE_SSH_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} start\""
+                    sh "ssh ${REMOTE_IDENTITY_FILE} ${REMOTE_SSH_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} restart\""
                 }
             }
         }

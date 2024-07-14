@@ -7,7 +7,7 @@ PID_FILE="/var/run/$APP_NAME.pid"
 start() {
     if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE"); then
         echo "$APP_NAME is already running"
-        exit 1
+        exit 0
     fi
     echo "Starting $APP_NAME..."
     nohup $APP_PATH > /var/log/$APP_NAME.log 2>&1 &
@@ -18,7 +18,7 @@ start() {
 stop() {
     if [ ! -f "$PID_FILE" ] || ! kill -0 $(cat "$PID_FILE"); then
         echo "$APP_NAME is not running"
-        exit 1
+        exit 0
     fi
     echo "Stopping $APP_NAME..."
     kill -TERM $(cat "$PID_FILE")
