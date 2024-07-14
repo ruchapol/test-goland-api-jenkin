@@ -41,8 +41,8 @@ pipeline {
                     sh "docker run -d --name ${CONTAINER_NAME} ${PORT_MAPPING} ${VOLUME_MAPPING} ${IMAGE}"
                     
                     // Execute commands inside the container (optional)
-                    sh "docker exec ${CONTAINER_NAME} echo 'Hello World'"
-                    sh "docker exec ${CONTAINER_NAME} ls -l /app"
+                    // sh "docker exec ${CONTAINER_NAME} echo 'Hello World'"
+                    // sh "docker exec ${CONTAINER_NAME} ls -l /app"
                     sh "ls -l ./artifact"
                 }
             }
