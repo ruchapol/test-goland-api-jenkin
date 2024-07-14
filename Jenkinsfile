@@ -12,6 +12,7 @@ pipeline {
         REMOTE_SCP_PORT = "-P 2224"
         REMOTE_PROJECT_PATH = "/home/jenkins/be-api"
         REMOTE_RUN_SCRIPT_PATH = "/home/jenkins/be-api/run-2.sh"
+        REMOTE_IDENTITY_FILE = "-i /var/lib/jenkins/.ssh/id_rsa"
         // ${REMOTE_USER}@${REMOTE_HOST}
     }
     stages {
@@ -26,7 +27,7 @@ pipeline {
                         fi
                     """
 
-                    sh "ssh ${REMOTE_SSH_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} stop\""
+                    sh "ssh ${REMOTE_IDENTITY_FILE} ${REMOTE_SSH_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} stop\""
                 }
             }
         }
@@ -69,15 +70,15 @@ pipeline {
             steps {
                 script {
                     sh "ls -l ./artifact"
-                    sh "scp ${REMOTE_SCP_PORT} ./artifact/main ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
-                    sh "scp ${REMOTE_SCP_PORT} ./etc/run-2.sh ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
+                    sh "scp ${REMOTE_IDENTITY_FILE} ${REMOTE_SCP_PORT} ./artifact/main ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
+                    sh "scp ${REMOTE_IDENTITY_FILE} ${REMOTE_SCP_PORT} ./etc/run-2.sh ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
                 }
             }
         }
         stage('Run') {
             steps {
                 script {
-                    sh "ssh ${REMOTE_SSH_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} start\""
+                    sh "ssh ${REMOTE_IDENTITY_FILE} ${REMOTE_SSH_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} start\""
                 }
             }
         }
