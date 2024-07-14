@@ -37,12 +37,21 @@ pipeline {
         stage('Run Docker Container For Build') {
             steps {
                 script {
-                    // Run the Docker container in detached mode
-                    sh "docker run -d --name ${CONTAINER_NAME} ${PORT_MAPPING} ${VOLUME_MAPPING} ${IMAGE}"
+                    // Run the Docker container
+                    sh "docker run --name ${CONTAINER_NAME} ${PORT_MAPPING} ${IMAGE}"
                     
-                    // Execute commands inside the container (optional)
-                    // sh "docker exec ${CONTAINER_NAME} echo 'Hello World'"
-                    // sh "docker exec ${CONTAINER_NAME} ls -l /app"
+                    // Copy the artifact from the container to the Jenkins workspace
+                    sh "docker cp ${CONTAINER_NAME}:/app/artifact ./artifact"
+                    
+                    // Stop and remove the container after copying the artifact
+                    sh "docker stop ${CONTAINER_NAME} || true"
+                    sh "docker rm ${CONTAINER_NAME} || true"
+                }
+            }
+        }
+        stage('List Artifact') {
+            steps {
+                script {
                     sh "ls -l ./artifact"
                 }
             }
