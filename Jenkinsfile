@@ -32,7 +32,7 @@ pipeline {
                             docker rm ${CONTAINER_NAME} || true
                         fi
                     """
-                    sh "rm -f artifact/*"
+                    // sh "rm -f artifact/*"
                 }
             }
         }
