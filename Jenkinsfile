@@ -74,7 +74,7 @@ pipeline {
             steps {
                 script {
                     sh "ls -l ./artifact"
-                    sh "scp ${REMOTE_IDENTITY_FILE} ${REMOTE_SCP_PORT} ./artifact/main ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
+                    sh "scp -v ${REMOTE_IDENTITY_FILE} ${REMOTE_SCP_PORT} ./artifact/main ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
                     sh "scp ${REMOTE_IDENTITY_FILE} ${REMOTE_SCP_PORT} ./etc/run-2.sh ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
                 }
             }
