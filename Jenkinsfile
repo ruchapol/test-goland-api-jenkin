@@ -4,7 +4,7 @@ pipeline {
         CONTAINER_NAME = "test-goland-api-jenkin"
         IMAGE = "${CONTAINER_NAME}:latest"
         DOCKERFILE = "./Dockerfile.jenkins"
-        PORT_MAPPING = "3001:3000"
+        PORT_MAPPING = "3001:3000 2226:22"
     }
     stages {
         stage('Cleanup') {
