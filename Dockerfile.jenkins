@@ -12,7 +12,8 @@ RUN go mod init my-app && \
     GOOS=linux GOARCH=amd64 go build -o ./main ./main.go
 
 RUN mkdir ./artifact && \
-    cp ./main ./artifact/main
+    cp ./main ./artifact/main 
+
 
 
 # CMD ["./main"]

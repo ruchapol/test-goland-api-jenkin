@@ -5,7 +5,7 @@ pipeline {
         IMAGE = "${CONTAINER_NAME}:latest"
         DOCKERFILE = "./Dockerfile.jenkins"
         PORT_MAPPING = "-p 3001:3000"
-        VOLUME_MAPPING = "-v \$(pwd)/artifact:/app/artifact"
+        // VOLUME_MAPPING = "-v \$(pwd)/artifact:/app/artifact"
     }
     stages {
         stage('Cleanup') {
@@ -38,7 +38,9 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container with volume mapping
-                    sh "docker run --name ${CONTAINER_NAME} ${PORT_MAPPING} ${VOLUME_MAPPING} ${IMAGE}"
+                    sh "docker run --name ${CONTAINER_NAME} ${PORT_MAPPING} ${IMAGE}"
+
+                    sh "docker cp ${CONTAINER_NAME}:/app/artifact ./artifact"
                     
                     // Stop and remove the container after copying the artifact
                     sh "docker stop ${CONTAINER_NAME} || true"
