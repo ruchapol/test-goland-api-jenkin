@@ -4,7 +4,7 @@ pipeline {
         CONTAINER_NAME = "bank-jenkins"
         IMAGE = "${CONTAINER_NAME}:latest"
         DOCKERFILE = "./Dockerfile.jenkins"
-        PORT_MAPPING = "-p 3001:3000 -p 2226:22"
+        PORT_MAPPING = "-p 3001:3000"
         VOLUME_MAPPING = "-v ./artifact:/app/artifact"
     }
     stages {
