@@ -45,81 +45,70 @@ ssh jenkins@localhost -p 2224 -i /home/ruchapol/.ssh/id_rsa
 mkdir -P /home/jenkins/be-api
 chown -R jenkins:jenkins /home/jenkins
 
-// set up openrc to manage service 
-// [on be-bank container]
-apk update
-apk add openrc
-rc-status --list
-rc-service --list
-
-// add service file 
-mkdir -p /etc/init.d
-
-write down to "/etc/init.d/be-api":
-```
-#!/sbin/openrc-run
-name="be-api"
-
-command="/home/jenkins/be-api/main"
-command_args=""
-pidfile="/var/run/be-api.pid"
-command_background="true"
-
-depend() {
-    need localmount netmount
-    use net
-}
-
----
-#!/sbin/openrc-run
-
-name="be-api"
-command="/home/jenkins/be-api/main"
-command_args=""
-pidfile="/var/run/be-api.pid"
-command_background=true
-output_log="/var/log/be-api.log"
-error_log="/var/log/be-api-error.log"
-
-depend() {
-    need localmount
-    use net
-}
-
-start_pre() {
-    touch "$output_log" "$error_log"
-}
-
-start() {
-    ebegin "Starting $name"
-    start-stop-daemon --start --exec $command -- $command_args >> "$output_log" 2>> "$error_log"
-    eend $?
-}
-
-stop() {
-    ebegin "Stopping $name"
-    start-stop-daemon --stop --exec $command
-    eend $?
-}
-
-
-```
-
-chmod +x /etc/init.d/be-api
-
-write down to "/home/jenkins/be-api/run.sh":
+// make own be-api service
+write to "/home/jenkins/be-api/run-2.sh":
 ```
 #!/bin/sh
 
-/etc/init.d/be-api start
-tail -f /dev/null
+APP_NAME="be-api"
+APP_PATH="/home/jenkins/be-api/main"
+PID_FILE="/var/run/$APP_NAME.pid"
+
+start() {
+    if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE"); then
+        echo "$APP_NAME is already running"
+        exit 1
+    fi
+    echo "Starting $APP_NAME..."
+    nohup $APP_PATH > /var/log/$APP_NAME.log 2>&1 &
+    echo $! > "$PID_FILE"
+    echo "$APP_NAME started with PID $(cat $PID_FILE)"
+}
+
+stop() {
+    if [ ! -f "$PID_FILE" ] || ! kill -0 $(cat "$PID_FILE"); then
+        echo "$APP_NAME is not running"
+        exit 1
+    fi
+    echo "Stopping $APP_NAME..."
+    kill -TERM $(cat "$PID_FILE")
+    rm -f "$PID_FILE"
+    echo "$APP_NAME stopped"
+}
+
+status() {
+    if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE"); then
+        echo "$APP_NAME is running with PID $(cat $PID_FILE)"
+    else
+        echo "$APP_NAME is not running"
+    fi
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|status|restart}"
+        exit 1
+esac
+
 ```
 
-chmod +x /home/jenkins/be-api/run.sh
+chmod +x /path/to/your/script.sh
 
-// start/stop service
-rc-status be-api start
-rc-status be-api stop
+// run/start/stop service
+/home/jenkins/be-api/run-2.sh [start|stop|status|restart]
 
-/etc/init.d/be-api start
-/etc/init.d/be-api stop
+// test server 
+curl localhost:3000
