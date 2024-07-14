@@ -63,7 +63,7 @@ pipeline {
                 script {
                     // Run the Docker container with volume mapping
                     
-                    sh "docker run --name ${CONTAINER_NAME} ${VOLUME_MAPPING} ${IMAGE} /bin/bash -c \"cp ./main ./artifact/main\ && chown -R 1000:1000 ./artifact\""
+                    sh "docker run --name ${CONTAINER_NAME} ${VOLUME_MAPPING} ${IMAGE} /bin/bash -c \"cp ./main ./artifact/main && chown -R 1000:1000 ./artifact\""
                     
                     // Stop and remove the container after the process
                     sh "docker stop ${CONTAINER_NAME} || true"
