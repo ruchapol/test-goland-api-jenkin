@@ -111,6 +111,8 @@ esac
 
 chmod +x /home/jenkins/be-api/run-2.sh
 chown -R jenkins:jenkins /home/jenkins/be-api/run-2.sh
+// in windows (make it excutable to add to git)
+git add --chmod=+x run-2.sh
 
 // create log/pid files
 touch /var/run/be-api.pid
