@@ -41,12 +41,16 @@ ssh-copy-id  -p 2224 -i /home/ruchapol/.ssh/id_rsa jenkins@localhost
 // test shelling to be-bank container
 ssh jenkins@localhost -p 2224 -i /home/ruchapol/.ssh/id_rsa
 
-// make folder to run a project
+// add known host for jenkins
+ssh-keyscan -H localhost -p 2224 >> /var/lib/jenkins/.ssh/known_hosts
+
+// make folder to run a project [at be-api container]
 mkdir -p /home/jenkins/be-api
 chown -R jenkins:jenkins /home/jenkins
 
 // make own be-api service
 write to "/home/jenkins/be-api/run-2.sh":
+
 ```
 #!/bin/sh
 
@@ -106,6 +110,7 @@ esac
 ```
 
 chmod +x /home/jenkins/be-api/run-2.sh
+chown -R jenkins:jenkins /home/jenkins/be-api/run-2.sh
 
 // run/start/stop service
 /home/jenkins/be-api/run-2.sh [start|stop|status|restart]
