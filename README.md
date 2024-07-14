@@ -112,6 +112,13 @@ esac
 chmod +x /home/jenkins/be-api/run-2.sh
 chown -R jenkins:jenkins /home/jenkins/be-api/run-2.sh
 
+// create log/pid files
+touch /var/run/be-api.pid
+chown jenkins:jenkins /var/run/be-api.pid
+
+touch /var/log/be-api.log
+chown jenkins:jenkins /var/log/be-api.log
+
 // run/start/stop service
 /home/jenkins/be-api/run-2.sh [start|stop|status|restart]
 
