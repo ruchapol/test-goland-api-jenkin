@@ -4,8 +4,13 @@ pipeline {
         CONTAINER_NAME = "bank-jenkins"
         IMAGE = "${CONTAINER_NAME}:latest"
         DOCKERFILE = "./Dockerfile.jenkins"
-        PORT_MAPPING = "-p 3001:3000"
+        // PORT_MAPPING = "-p 3001:3000"
         VOLUME_MAPPING = "-v ${WORKSPACE}/artifact:/app/artifact"
+        REMOTE_USER = "jenkins"
+        REMOTE_HOST = "localhost"
+        REMOTE_SSH_PORT = "-P 2224"
+        REMOTE_PROJECT_PATH = "/home/jenkins/be-api"
+        // ${REMOTE_USER}@${REMOTE_HOST}
     }
     stages {
         stage('Cleanup') {
@@ -48,7 +53,7 @@ pipeline {
                 script {
                     // Run the Docker container with volume mapping
                     
-                    sh "docker run --name ${CONTAINER_NAME} ${PORT_MAPPING} ${VOLUME_MAPPING} ${IMAGE} /bin/bash -c \"cp ./main ./artifact/main\""
+                    sh "docker run --name ${CONTAINER_NAME} ${VOLUME_MAPPING} ${IMAGE} /bin/bash -c \"cp ./main ./artifact/main\""
                     
                     // Stop and remove the container after the process
                     sh "docker stop ${CONTAINER_NAME} || true"
@@ -56,10 +61,18 @@ pipeline {
                 }
             }
         }
-        stage('List Artifact') {
+        stage('Transfer File') {
             steps {
                 script {
                     sh "ls -l ./artifact"
+                    sh "scp ${REMOTE_SSH_PORT} ./artifact/main ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
+                }
+            }
+        }
+        stage('Run') {
+            steps {
+                script {
+                    
                 }
             }
         }
