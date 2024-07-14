@@ -8,7 +8,8 @@ pipeline {
         VOLUME_MAPPING = "-v ${WORKSPACE}/artifact:/app/artifact"
         REMOTE_USER = "jenkins"
         REMOTE_HOST = "localhost"
-        REMOTE_SSH_PORT = "-P 2224"
+        REMOTE_SSH_PORT = "-p 2224"
+        REMOTE_SCP_PORT = "-P 2224"
         REMOTE_PROJECT_PATH = "/home/jenkins/be-api"
         REMOTE_RUN_SCRIPT_PATH = "/home/jenkins/be-api/run-2.sh"
         // ${REMOTE_USER}@${REMOTE_HOST}
@@ -25,7 +26,7 @@ pipeline {
                         fi
                     """
 
-                    sh "ssh ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} stop\""
+                    sh "ssh ${REMOTE_SCP_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} stop\""
                 }
             }
         }
@@ -68,15 +69,15 @@ pipeline {
             steps {
                 script {
                     sh "ls -l ./artifact"
-                    sh "scp ${REMOTE_SSH_PORT} ./artifact/main ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
-                    sh "scp ${REMOTE_SSH_PORT} ./etc/run-2.sh ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
+                    sh "scp ${REMOTE_SCP_PORT} ./artifact/main ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
+                    sh "scp ${REMOTE_SCP_PORT} ./etc/run-2.sh ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PROJECT_PATH}"
                 }
             }
         }
         stage('Run') {
             steps {
                 script {
-                    sh "ssh ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} start\""
+                    sh "ssh ${REMOTE_SCP_PORT} ${REMOTE_USER}@${REMOTE_HOST} \"${REMOTE_RUN_SCRIPT_PATH} start\""
                 }
             }
         }
