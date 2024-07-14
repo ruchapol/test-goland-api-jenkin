@@ -4,7 +4,7 @@ pipeline {
         CONTAINER_NAME = "test-goland-api-jenkin"
         IMAGE = "${CONTAINER_NAME}:latest"
         DOCKERFILE = "./Dockerfile.jenkins"
-        PORT_MAPPING = "3001:3000 2226:22"
+        PORT_MAPPING = "-p 3001:3000 -p 2226:22"
     }
     stages {
         stage('Cleanup') {
@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container in detached mode
-                    sh "docker run -d --name ${CONTAINER_NAME} -p ${PORT_MAPPING} ${IMAGE}"
+                    sh "docker run -d --name ${CONTAINER_NAME} ${PORT_MAPPING} ${IMAGE}"
                     
                     // Execute commands inside the container (optional)
                     sh "docker exec ${CONTAINER_NAME} echo 'Hello World'"
