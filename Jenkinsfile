@@ -46,7 +46,7 @@ pipeline {
         stage('Run Docker Container For Build') {
             steps {
                 script {
-                    // Run the Docker container with volume mapping and specific user permissions
+                    // Run the Docker container with volume mapping
                     sh "docker run --name ${CONTAINER_NAME} ${PORT_MAPPING} ${VOLUME_MAPPING} ${IMAGE}"
                     
                     // Stop and remove the container after the process

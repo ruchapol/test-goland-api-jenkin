@@ -5,15 +5,11 @@ WORKDIR /app
 COPY ./main.go .
 
 RUN apk update && \
-    apk add bash     
+    apk add bash
 
 RUN go mod init my-app && \
     go get github.com/gofiber/fiber/v2 && \
     GOOS=linux GOARCH=amd64 go build -o ./main ./main.go
 
-RUN mkdir ./artifact && \
-    cp ./main ./artifact/main 
-
-
-
-# CMD ["./main"]
+RUN mkdir -p ./artifact && \
+    cp ./main ./artifact/main
