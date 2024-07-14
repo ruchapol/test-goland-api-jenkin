@@ -5,6 +5,7 @@ pipeline {
         IMAGE = "${CONTAINER_NAME}:latest"
         DOCKERFILE = "./Dockerfile.jenkins"
         PORT_MAPPING = "-p 3001:3000 -p 2226:22"
+        VOLUME_MAPPING = "-v ./artifact:/app/artifact"
     }
     stages {
         stage('Cleanup') {
@@ -37,11 +38,12 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container in detached mode
-                    sh "docker run -d --name ${CONTAINER_NAME} ${PORT_MAPPING} ${IMAGE}"
+                    sh "docker run -d --name ${CONTAINER_NAME} ${PORT_MAPPING} ${VOLUME_MAPPING} ${IMAGE}"
                     
                     // Execute commands inside the container (optional)
                     sh "docker exec ${CONTAINER_NAME} echo 'Hello World'"
                     sh "docker exec ${CONTAINER_NAME} ls -l /app"
+                    sh "ls -l ./artifact"
                 }
             }
         }
