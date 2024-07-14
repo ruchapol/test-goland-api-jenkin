@@ -20,15 +20,15 @@ RUN go mod init my-app && \
     go get github.com/gofiber/fiber/v2 && \
     GOOS=linux GOARCH=amd64 go build -o ./main ./main.go
 
-RUN ls /app
+# RUN ls /app
 
-FROM alpine:3.15
+# FROM alpine:3.15
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY --from=builder /app .
+# COPY --from=builder /app .
 
-RUN ls /app
+# RUN ls /app
 
 EXPOSE 3000
 
