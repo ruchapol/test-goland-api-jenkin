@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        CONTAINER_NAME = "bank-jenkins"
+        CONTAINER_NAME = "test-goland-api-jenkin"
         IMAGE = "${CONTAINER_NAME}:latest"
         DOCKERFILE = "./Dockerfile.jenkins"
         PORT_MAPPING = "-p 3001:3000 -p 2226:22"

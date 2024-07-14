@@ -1,0 +1,39 @@
+FROM golang:1.18.2-alpine3.15 AS builder
+
+WORKDIR /app
+
+COPY ./main.go .
+
+RUN apk update && \
+    apk add bash     
+
+# install ssh server
+RUN apk add --no-cache openssh 
+
+RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+
+RUN adduser -h /home/jenkins -s /bin/sh -D jenkins
+
+RUN echo -n 'jenkins:P@ssw0rd' | chpasswd
+
+RUN go mod init my-app && \
+    go get github.com/gofiber/fiber/v2 && \
+    GOOS=linux GOARCH=amd64 go build -o ./main ./main.go
+
+# RUN ls /app
+
+# FROM alpine:3.15
+
+# WORKDIR /app
+
+# COPY --from=builder /app .
+
+# RUN ls /app
+
+EXPOSE 3000
+
+EXPOSE 22
+
+CMD ["./main"]
+
+# CMD ["/start.sh"]
