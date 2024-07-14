@@ -26,7 +26,7 @@ pipeline {
                 script {
                     // Ensure Jenkins has permission to write to the workspace
                     sh "mkdir -p ./artifact"
-                    sh "chmod 777 ./artifact"
+                    // sh "chmod 777 ./artifact"
                 }
             }
         }
