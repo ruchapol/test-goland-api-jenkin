@@ -47,7 +47,8 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container with volume mapping
-                    sh "docker run --name ${CONTAINER_NAME} ${PORT_MAPPING} ${VOLUME_MAPPING} ${IMAGE}"
+                    
+                    sh "docker run --name ${CONTAINER_NAME} ${PORT_MAPPING} ${VOLUME_MAPPING} ${IMAGE} /bin/bash -c \"cp ./main ./artifact/main\""
                     
                     // Stop and remove the container after the process
                     sh "docker stop ${CONTAINER_NAME} || true"
